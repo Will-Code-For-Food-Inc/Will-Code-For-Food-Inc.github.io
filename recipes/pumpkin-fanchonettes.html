@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pumpkin Fanchonettes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --pumpkin: #d4731a;
+            --pumpkin-light: #f5c882;
+            --amber: #b8860b;
+            --russet: #80461b;
+            --cream: #fdf6ec;
+            --brown: #3e2723;
+            --brown-light: #6d4c41;
+            --green: #2e5930;
+            --green-light: #4a7c59;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Work Sans', sans-serif;
+            background: var(--cream);
+            color: var(--brown);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        .bg-pattern {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image:
+                radial-gradient(circle at 15% 40%, rgba(212, 115, 26, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 85% 25%, rgba(184, 134, 11, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 50% 80%, rgba(128, 70, 27, 0.06) 0%, transparent 40%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        .container {
+            position: relative; z-index: 1;
+            max-width: 800px; margin: 0 auto; padding: 0 1.5rem 3rem;
+        }
+        header { text-align: center; padding: 3rem 1rem; animation: fadeDown 0.8s ease-out; }
+        @keyframes fadeDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes sway {
+            0%, 100% { transform: rotate(-3deg); }
+            50% { transform: rotate(3deg); }
+        }
+        .emoji-banner {
+            font-size: 2.5rem; letter-spacing: 0.5rem; margin-bottom: 1rem;
+        }
+        .emoji-banner span { display: inline-block; animation: sway 3s ease-in-out infinite; }
+        .emoji-banner span:nth-child(2) { animation-delay: 0.3s; }
+        .emoji-banner span:nth-child(3) { animation-delay: 0.6s; }
+        .emoji-banner span:nth-child(4) { animation-delay: 0.9s; }
+        .emoji-banner span:nth-child(5) { animation-delay: 1.2s; }
+        header h1 {
+            font-family: 'Crimson Pro', serif; font-size: 3rem; font-weight: 700;
+            line-height: 1.1; margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--russet), var(--pumpkin));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .byline { font-size: 1rem; color: var(--brown-light); font-weight: 300; }
+        .controls {
+            display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center;
+            margin: 1.5rem 0 2.5rem; animation: slideUp 0.6s ease-out 0.2s both;
+        }
+        .control-group {
+            background: white; border-radius: 14px; padding: 0.8rem 1.2rem;
+            box-shadow: 0 2px 12px rgba(62, 39, 35, 0.08);
+            display: flex; align-items: center; gap: 0.6rem;
+        }
+        .control-group label {
+            font-size: 0.8rem; font-weight: 600; text-transform: uppercase;
+            letter-spacing: 0.05em; color: var(--brown-light);
+        }
+        .control-group input, .control-group select {
+            font-family: 'Work Sans', sans-serif; font-size: 0.95rem;
+            border: 2px solid var(--pumpkin-light); border-radius: 8px;
+            padding: 0.4rem 0.6rem; background: var(--cream); color: var(--brown);
+            outline: none; transition: border-color 0.2s;
+        }
+        .control-group input:focus { border-color: var(--pumpkin); }
+        .control-group input[type="number"] { width: 4rem; text-align: center; }
+        .unit-toggle {
+            display: flex; border-radius: 8px; overflow: hidden;
+            border: 2px solid var(--pumpkin-light);
+        }
+        .unit-toggle button {
+            font-family: 'Work Sans', sans-serif; font-size: 0.85rem; font-weight: 600;
+            padding: 0.4rem 0.8rem; border: none; cursor: pointer; transition: all 0.2s;
+            background: var(--cream); color: var(--brown-light);
+        }
+        .unit-toggle button.active { background: var(--pumpkin); color: white; }
+        .section {
+            background: white; border-radius: 18px; padding: 2rem; margin-bottom: 1.5rem;
+            box-shadow: 0 4px 20px rgba(62, 39, 35, 0.06);
+            animation: slideUp 0.6s ease-out 0.3s both;
+        }
+        .section h2 {
+            font-family: 'Crimson Pro', serif; font-size: 1.5rem; font-weight: 700;
+            color: var(--pumpkin); margin-bottom: 1.2rem; padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--pumpkin-light);
+        }
+        .ingredient-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0.7rem 0.8rem; border-radius: 10px; transition: all 0.2s ease; cursor: default;
+        }
+        .ingredient-item:hover {
+            background: var(--pumpkin-light); transform: translateX(6px);
+        }
+        .ingredient-name { font-weight: 400; flex: 1; }
+        .ingredient-amount {
+            font-weight: 600; color: var(--pumpkin); text-align: right;
+            min-width: 120px; font-variant-numeric: tabular-nums;
+        }
+        .instructions { animation: slideUp 0.6s ease-out 0.45s both; }
+        .step {
+            display: flex; gap: 1rem; margin-bottom: 1rem; align-items: flex-start;
+        }
+        .step-num {
+            background: var(--pumpkin); color: white; width: 2rem; height: 2rem;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-weight: 600; font-size: 0.85rem; flex-shrink: 0;
+        }
+        .step p { line-height: 1.6; padding-top: 0.2rem; }
+        footer {
+            text-align: center; padding: 2rem 1rem; color: var(--brown-light);
+            font-size: 0.85rem; font-weight: 300;
+            animation: slideUp 0.6s ease-out 0.6s both;
+        }
+        @media (max-width: 600px) {
+            header h1 { font-size: 2.2rem; }
+            .controls { flex-direction: column; align-items: stretch; }
+            .ingredient-item { flex-direction: column; align-items: flex-start; gap: 0.2rem; }
+            .ingredient-amount { text-align: left; min-width: auto; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-pattern"></div>
+    <div class="container">
+        <header>
+            <div class="emoji-banner">
+                <span>🎃</span> <span>🍂</span> <span>🥧</span> <span>🍁</span> <span>🎃</span>
+            </div>
+            <h1>Pumpkin Fanchonettes</h1>
+            <p class="byline">From American Cookery &middot; November 1921</p>
+        </header>
+        <div class="controls">
+            <div class="control-group">
+                <label>Scale</label>
+                <input type="number" id="scale-input" value="1" min="0.25" max="10" step="0.25">
+            </div>
+            <div class="control-group">
+                <label>Units</label>
+                <div class="unit-toggle">
+                    <button id="btn-us" class="active" onclick="setUnit('us')">US</button>
+                    <button id="btn-metric" onclick="setUnit('metric')">Metric</button>
+                </div>
+            </div>
+        </div>
+        <div id="recipe-sections"></div>
+        <div class="section instructions">
+            <h2>Instructions</h2>
+            <div class="step"><div class="step-num">1</div><p>Beat eggs and sugar together until light and fluffy.</p></div>
+            <div class="step"><div class="step-num">2</div><p>Fold in pumpkin puree, vanilla, and spices until well combined.</p></div>
+            <div class="step"><div class="step-num">3</div><p>Fill prepared pastry shells with the pumpkin mixture.</p></div>
+            <div class="step"><div class="step-num">4</div><p>Bake at moderate heat (350°F / 175°C) until filling sets, about 25–30 minutes.</p></div>
+        </div>
+        <footer>Recipe from <strong>American Cookery</strong>, November 1921 — Public Domain</footer>
+    </div>
+    <script>
+        const recipe = {
+            filling: [
+                { name: 'pumpkin puree', us: { amount: 2, unit: 'cups' }, metric: { amount: 480, unit: 'g' }, scalable: true },
+                { name: 'sugar', us: { amount: 1, unit: 'cup' }, metric: { amount: 200, unit: 'g' }, scalable: true },
+                { name: 'eggs', us: { amount: 3, unit: '' }, metric: { amount: 3, unit: '' }, scalable: true },
+                { name: 'vanilla extract', us: { amount: 1, unit: 'teaspoon' }, metric: { amount: 5, unit: 'ml' }, scalable: true },
+                { name: 'cinnamon', us: { amount: 1, unit: 'teaspoon' }, metric: { amount: 3, unit: 'g' }, scalable: true },
+                { name: 'ginger', us: { amount: 0.5, unit: 'teaspoon' }, metric: { amount: 1.5, unit: 'g' }, scalable: true },
+                { name: 'cloves', us: { amount: 0.25, unit: 'teaspoon' }, metric: { amount: 0.5, unit: 'g' }, scalable: true },
+                { name: 'pastry shells', us: { amount: '', unit: 'as needed' }, metric: { amount: '', unit: 'as needed' }, scalable: false }
+            ]
+        };
+        const sectionLabels = { filling: 'Filling' };
+        let currentUnit = 'us', currentScale = 1;
+        const fractionMap = [[0.125,'⅛'],[0.25,'¼'],[0.333,'⅓'],[0.5,'½'],[0.667,'⅔'],[0.75,'¾']];
+        function formatFraction(value) {
+            if (value === 0 || value === '') return '';
+            const whole = Math.floor(value), frac = value - whole;
+            if (frac < 0.06) return whole.toString();
+            let closest = '', dist = Infinity;
+            for (const [d, s] of fractionMap) { const dd = Math.abs(frac - d); if (dd < dist) { dist = dd; closest = s; } }
+            if (dist < 0.06) return whole > 0 ? `${whole} ${closest}` : closest;
+            return value % 1 === 0 ? value.toString() : value.toFixed(1);
+        }
+        function formatMetric(v) { if (v === 0 || v === '') return ''; if (v >= 10) return Math.round(v).toString(); if (v >= 1) return (Math.round(v*2)/2).toString(); return v.toFixed(1); }
+        function formatAmount(ing, scale) {
+            const data = ing[currentUnit];
+            if (data.amount === '') return data.unit;
+            let amount = ing.scalable ? data.amount * scale : data.amount;
+            let formatted = currentUnit === 'us' ? formatFraction(amount) : formatMetric(amount);
+            if (data.unit) {
+                let unit = data.unit;
+                if (currentUnit === 'us' && amount <= 1) unit = unit.replace(/s$/, '');
+                else if (currentUnit === 'us' && amount > 1 && !unit.endsWith('s') && unit !== '') unit += 's';
+                return `${formatted} ${unit}`;
+            }
+            return formatted;
+        }
+        function render() {
+            const container = document.getElementById('recipe-sections');
+            container.innerHTML = '';
+            for (const [key, ingredients] of Object.entries(recipe)) {
+                const section = document.createElement('div'); section.className = 'section';
+                const title = document.createElement('h2'); title.textContent = sectionLabels[key] || key;
+                section.appendChild(title);
+                for (const ing of ingredients) {
+                    const item = document.createElement('div'); item.className = 'ingredient-item';
+                    const name = document.createElement('span'); name.className = 'ingredient-name'; name.textContent = ing.name;
+                    const amount = document.createElement('span'); amount.className = 'ingredient-amount'; amount.textContent = formatAmount(ing, currentScale);
+                    item.appendChild(name); item.appendChild(amount); section.appendChild(item);
+                }
+                container.appendChild(section);
+            }
+        }
+        function setUnit(u) { currentUnit = u; document.getElementById('btn-us').classList.toggle('active', u==='us'); document.getElementById('btn-metric').classList.toggle('active', u==='metric'); render(); }
+        document.getElementById('scale-input').addEventListener('input', e => { const v = parseFloat(e.target.value); if (v > 0) { currentScale = v; render(); } });
+        render();
+    </script>
+</body>
+</html>
