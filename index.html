@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Will Code For Food</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Work+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Work Sans', sans-serif;
+            background: #faf7f2;
+            color: #2d2a26;
+            min-height: 100vh;
+        }
+        header {
+            text-align: center;
+            padding: 4rem 2rem 2rem;
+            background: linear-gradient(135deg, #d4a574, #c4956a, #b8860b);
+            color: white;
+        }
+        header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+        header p {
+            font-size: 1.1rem;
+            font-weight: 300;
+            opacity: 0.9;
+        }
+        .recipes {
+            max-width: 900px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+        .recipes h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #d4a574;
+            padding-bottom: 0.5rem;
+        }
+        .recipe-list {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 1.5rem;
+        }
+        .recipe-list a {
+            display: block;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 12px;
+            text-decoration: none;
+            color: #2d2a26;
+            font-size: 1.1rem;
+            font-weight: 500;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .recipe-list a:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+        }
+        .empty {
+            text-align: center;
+            color: #888;
+            font-style: italic;
+            padding: 3rem 0;
+        }
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: #999;
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Will Code For Food</h1>
+        <p>Our collection of interactive recipes</p>
+    </header>
+    <main class="recipes">
+        <h2>Recipes</h2>
+        <div id="recipe-list"></div>
+    </main>
+    <footer>Will Code For Food Inc.</footer>
+    <script>
+        fetch('recipes/index.json')
+            .then(r => r.ok ? r.json() : [])
+            .then(recipes => {
+                const container = document.getElementById('recipe-list');
+                if (!recipes.length) {
+                    container.innerHTML = '<p class="empty">No recipes yet — check back soon!</p>';
+                    return;
+                }
+                const list = document.createElement('div');
+                list.className = 'recipe-list';
+                recipes.forEach(r => {
+                    const a = document.createElement('a');
+                    a.href = 'recipes/' + r.file;
+                    a.textContent = r.name;
+                    list.appendChild(a);
+                });
+                container.appendChild(list);
+            })
+            .catch(() => {
+                document.getElementById('recipe-list').innerHTML =
+                    '<p class="empty">No recipes yet — check back soon!</p>';
+            });
+    </script>
+</body>
+</html>

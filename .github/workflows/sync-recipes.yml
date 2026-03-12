@@ -1,0 +1,63 @@
+name: Sync Recipes from Claude-Work
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 */6 * * *'  # every 6 hours
+  repository_dispatch:
+    types: [recipes-updated]
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout pages repo
+        uses: actions/checkout@v4
+
+      - name: Fetch recipes from Claude-Work
+        run: |
+          mkdir -p recipes
+          # Clone just the recipes directory from Claude-Work
+          git clone --depth 1 --filter=blob:none --sparse \
+            https://github.com/Will-Code-For-Food-Inc/Claude-Work.git /tmp/claude-work
+          cd /tmp/claude-work
+          git sparse-checkout set recipes
+          cd -
+
+          # Copy HTML recipe files
+          cp /tmp/claude-work/recipes/*.html recipes/ 2>/dev/null || true
+
+          # Generate index.json from HTML files
+          echo "[" > recipes/index.json
+          first=true
+          for f in recipes/*.html; do
+            [ -f "$f" ] || continue
+            filename=$(basename "$f")
+            # Extract title from <title> tag, fallback to filename
+            title=$(grep -oP '(?<=<title>).*?(?=</title>)' "$f" | head -1)
+            if [ -z "$title" ]; then
+              title=$(basename "$f" .html | sed 's/-/ /g; s/\b\(.\)/\u\1/g')
+            fi
+            if [ "$first" = true ]; then
+              first=false
+            else
+              echo "," >> recipes/index.json
+            fi
+            printf '  {"file": "%s", "name": "%s"}' "$filename" "$title" >> recipes/index.json
+          done
+          echo "" >> recipes/index.json
+          echo "]" >> recipes/index.json
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add recipes/
+          git diff --cached --quiet && echo "No changes" && exit 0
+          git commit -m "Sync recipes from Claude-Work"
+          git push
