@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banana Upside Down Cake</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Karla:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #d4a24e;
+            --gold-light: #f5e6c8;
+            --brown: #5c3d2e;
+            --brown-light: #8b6544;
+            --cream: #fdf8f0;
+            --caramel: #c8872e;
+            --chocolate: #3b2314;
+            --banana: #f7e58d;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Karla', sans-serif;
+            background: var(--cream);
+            color: var(--brown);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .bg-pattern {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image:
+                radial-gradient(circle at 20% 50%, rgba(247, 229, 141, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(212, 162, 78, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 60% 80%, rgba(200, 135, 46, 0.08) 0%, transparent 40%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 1.5rem 3rem;
+        }
+
+        header {
+            text-align: center;
+            padding: 3rem 1rem;
+            animation: fadeDown 0.8s ease-out;
+        }
+
+        @keyframes fadeDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .emoji-banner {
+            font-size: 2.5rem;
+            letter-spacing: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--chocolate);
+            line-height: 1.1;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--chocolate), var(--caramel));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .byline {
+            font-size: 1rem;
+            color: var(--brown-light);
+            font-weight: 300;
+        }
+
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            margin: 1.5rem 0 2.5rem;
+            animation: slideUp 0.6s ease-out 0.2s both;
+        }
+
+        .control-group {
+            background: white;
+            border-radius: 14px;
+            padding: 0.8rem 1.2rem;
+            box-shadow: 0 2px 12px rgba(92, 61, 46, 0.08);
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .control-group label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--brown-light);
+        }
+
+        .control-group select,
+        .control-group input {
+            font-family: 'Karla', sans-serif;
+            font-size: 0.95rem;
+            border: 2px solid var(--gold-light);
+            border-radius: 8px;
+            padding: 0.4rem 0.6rem;
+            background: var(--cream);
+            color: var(--brown);
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .control-group select:focus,
+        .control-group input:focus {
+            border-color: var(--gold);
+        }
+
+        .control-group input[type="number"] {
+            width: 4rem;
+            text-align: center;
+        }
+
+        .unit-toggle {
+            display: flex;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 2px solid var(--gold-light);
+        }
+
+        .unit-toggle button {
+            font-family: 'Karla', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 0.4rem 0.8rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: var(--cream);
+            color: var(--brown-light);
+        }
+
+        .unit-toggle button.active {
+            background: var(--gold);
+            color: white;
+        }
+
+        .section {
+            background: white;
+            border-radius: 18px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 20px rgba(92, 61, 46, 0.06);
+            animation: slideUp 0.6s ease-out both;
+        }
+
+        .section:nth-child(1) { animation-delay: 0.3s; }
+        .section:nth-child(2) { animation-delay: 0.45s; }
+
+        .section h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--caramel);
+            margin-bottom: 1.2rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--gold-light);
+        }
+
+        .ingredient-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.7rem 0.8rem;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+            cursor: default;
+        }
+
+        .ingredient-item:hover {
+            background: var(--gold-light);
+            transform: translateX(6px);
+        }
+
+        .ingredient-name {
+            font-weight: 400;
+            flex: 1;
+        }
+
+        .ingredient-amount {
+            font-weight: 600;
+            color: var(--caramel);
+            text-align: right;
+            min-width: 120px;
+            font-variant-numeric: tabular-nums;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem 1rem;
+            color: var(--brown-light);
+            font-size: 0.85rem;
+            font-weight: 300;
+            animation: slideUp 0.6s ease-out 0.6s both;
+        }
+
+        footer a {
+            color: var(--caramel);
+            text-decoration: none;
+        }
+
+        @media (max-width: 600px) {
+            header h1 { font-size: 2.2rem; }
+            .controls { flex-direction: column; align-items: stretch; }
+            .ingredient-item { flex-direction: column; align-items: flex-start; gap: 0.2rem; }
+            .ingredient-amount { text-align: left; min-width: auto; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-pattern"></div>
+    <div class="container">
+        <header>
+            <div class="emoji-banner">🍌 🍫 🍰</div>
+            <h1>Banana Upside Down Cake</h1>
+            <p class="byline">By Jake Cohen &middot; February 26, 2023</p>
+        </header>
+
+        <div class="controls">
+            <div class="control-group">
+                <label>Pan Size</label>
+                <select id="pan-select">
+                    <option value="1">9" round (original)</option>
+                    <option value="0.79">8" round</option>
+                    <option value="1.24">10" round</option>
+                    <option value="1.01">9x9" square</option>
+                    <option value="0.79">8x8" square</option>
+                    <option value="1.23">10x10" square</option>
+                    <option value="1.44">9x13" rectangular</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label>Scale</label>
+                <input type="number" id="scale-input" value="1" min="0.25" max="10" step="0.25">
+            </div>
+            <div class="control-group">
+                <label>Units</label>
+                <div class="unit-toggle">
+                    <button id="btn-us" class="active" onclick="setUnit('us')">US</button>
+                    <button id="btn-metric" onclick="setUnit('metric')">Metric</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="recipe-sections"></div>
+
+        <footer>
+            Recipe by <strong>Jake Cohen</strong>
+        </footer>
+    </div>
+
+    <script>
+        const recipe = {
+            topping: [
+                {
+                    name: 'nonstick cooking spray, for greasing',
+                    us: { amount: '', unit: '' },
+                    metric: { amount: '', unit: '' },
+                    scalable: false
+                },
+                {
+                    name: 'just-ripe, firm bananas, sliced lengthwise',
+                    us: { amount: 3, unit: '' },
+                    metric: { amount: 3, unit: '' },
+                    scalable: true
+                },
+                {
+                    name: 'granulated sugar',
+                    us: { amount: 0.75, unit: 'cup' },
+                    metric: { amount: 150, unit: 'g' },
+                    scalable: true
+                },
+                {
+                    name: 'water',
+                    us: { amount: 2, unit: 'tablespoons' },
+                    metric: { amount: 30, unit: 'ml' },
+                    scalable: true
+                }
+            ],
+            batter: [
+                {
+                    name: 'light brown sugar',
+                    us: { amount: 1, unit: 'cup' },
+                    metric: { amount: 200, unit: 'g' },
+                    scalable: true
+                },
+                {
+                    name: 'very-ripe bananas, mashed',
+                    us: { amount: 3, unit: '' },
+                    metric: { amount: 3, unit: '' },
+                    scalable: true
+                },
+                {
+                    name: 'extra-virgin olive oil',
+                    us: { amount: 0.75, unit: 'cup' },
+                    metric: { amount: 180, unit: 'ml' },
+                    scalable: true
+                },
+                {
+                    name: 'low-fat plain Greek yogurt or sour cream',
+                    us: { amount: 0.5, unit: 'cup' },
+                    metric: { amount: 120, unit: 'ml' },
+                    scalable: true
+                },
+                {
+                    name: 'vanilla extract',
+                    us: { amount: 2, unit: 'teaspoons' },
+                    metric: { amount: 10, unit: 'ml' },
+                    scalable: true
+                },
+                {
+                    name: 'large eggs, at room temperature',
+                    us: { amount: 2, unit: '' },
+                    metric: { amount: 2, unit: '' },
+                    scalable: true
+                },
+                {
+                    name: 'all purpose flour',
+                    us: { amount: 2, unit: 'cups' },
+                    metric: { amount: 250, unit: 'g' },
+                    scalable: true
+                },
+                {
+                    name: 'kosher salt',
+                    us: { amount: 1, unit: 'teaspoon' },
+                    metric: { amount: 5, unit: 'g' },
+                    scalable: true
+                },
+                {
+                    name: 'baking soda',
+                    us: { amount: 0.5, unit: 'teaspoon' },
+                    metric: { amount: 2.5, unit: 'g' },
+                    scalable: true
+                },
+                {
+                    name: 'baking powder',
+                    us: { amount: 0.5, unit: 'teaspoon' },
+                    metric: { amount: 2.5, unit: 'g' },
+                    scalable: true
+                },
+                {
+                    name: 'ground cinnamon',
+                    us: { amount: 0.5, unit: 'teaspoon' },
+                    metric: { amount: 1.5, unit: 'g' },
+                    scalable: true
+                },
+                {
+                    name: 'ground nutmeg',
+                    us: { amount: 0.5, unit: 'teaspoon' },
+                    metric: { amount: 1.5, unit: 'g' },
+                    scalable: true
+                },
+                {
+                    name: 'dark chocolate chips or chopped dark chocolate',
+                    us: { amount: 1, unit: 'cup' },
+                    metric: { amount: 175, unit: 'g' },
+                    scalable: true
+                }
+            ]
+        };
+
+        const sectionLabels = {
+            topping: 'For the Topping',
+            batter: 'For the Batter'
+        };
+
+        let currentUnit = 'us';
+        let currentPanScale = 1;
+        let currentUserScale = 1;
+
+        const fractionMap = [
+            [0.125, '⅛'], [0.25, '¼'], [0.333, '⅓'], [0.5, '½'],
+            [0.667, '⅔'], [0.75, '¾']
+        ];
+
+        function formatFraction(value) {
+            if (value === 0 || value === '') return '';
+            const whole = Math.floor(value);
+            const frac = value - whole;
+
+            if (frac < 0.06) return whole.toString();
+
+            let closestFrac = '';
+            let closestDist = Infinity;
+            for (const [dec, sym] of fractionMap) {
+                const dist = Math.abs(frac - dec);
+                if (dist < closestDist) {
+                    closestDist = dist;
+                    closestFrac = sym;
+                }
+            }
+
+            if (closestDist < 0.06) {
+                return whole > 0 ? `${whole} ${closestFrac}` : closestFrac;
+            }
+            return value % 1 === 0 ? value.toString() : value.toFixed(1);
+        }
+
+        function formatMetric(value) {
+            if (value === 0 || value === '') return '';
+            if (value >= 10) return Math.round(value).toString();
+            if (value >= 1) return (Math.round(value * 2) / 2).toString();
+            return value.toFixed(1);
+        }
+
+        function formatAmount(ingredient, totalScale) {
+            const system = currentUnit;
+            const data = ingredient[system];
+            if (data.amount === '') return data.unit;
+
+            let amount = ingredient.scalable ? data.amount * totalScale : data.amount;
+            let formatted;
+
+            if (system === 'us') {
+                formatted = formatFraction(amount);
+            } else {
+                formatted = formatMetric(amount);
+            }
+
+            if (data.unit) {
+                let unit = data.unit;
+                if (system === 'us' && amount <= 1) {
+                    unit = unit.replace(/s$/, '');
+                } else if (system === 'us' && amount > 1 && !unit.endsWith('s')
+                    && unit !== 'oz' && unit !== '') {
+                    unit = unit + 's';
+                }
+                return `${formatted} ${unit}`;
+            }
+            return formatted;
+        }
+
+        function render() {
+            const totalScale = currentPanScale * currentUserScale;
+            const container = document.getElementById('recipe-sections');
+            container.innerHTML = '';
+
+            for (const [key, ingredients] of Object.entries(recipe)) {
+                const section = document.createElement('div');
+                section.className = 'section';
+
+                const title = document.createElement('h2');
+                title.textContent = sectionLabels[key] || key;
+                section.appendChild(title);
+
+                for (const ing of ingredients) {
+                    const item = document.createElement('div');
+                    item.className = 'ingredient-item';
+
+                    const name = document.createElement('span');
+                    name.className = 'ingredient-name';
+                    name.textContent = ing.name;
+
+                    const amount = document.createElement('span');
+                    amount.className = 'ingredient-amount';
+                    amount.textContent = formatAmount(ing, totalScale);
+
+                    item.appendChild(name);
+                    item.appendChild(amount);
+                    section.appendChild(item);
+                }
+
+                container.appendChild(section);
+            }
+        }
+
+        function setUnit(unit) {
+            currentUnit = unit;
+            document.getElementById('btn-us').classList.toggle('active', unit === 'us');
+            document.getElementById('btn-metric').classList.toggle('active', unit === 'metric');
+            render();
+        }
+
+        document.getElementById('pan-select').addEventListener('change', (e) => {
+            currentPanScale = parseFloat(e.target.value);
+            render();
+        });
+
+        document.getElementById('scale-input').addEventListener('input', (e) => {
+            const val = parseFloat(e.target.value);
+            if (val > 0) {
+                currentUserScale = val;
+                render();
+            }
+        });
+
+        render();
+    </script>
+</body>
+</html>
