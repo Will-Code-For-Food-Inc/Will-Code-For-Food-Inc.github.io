@@ -22,12 +22,8 @@ jobs:
       - name: Fetch recipes from Claude-Work
         run: |
           mkdir -p recipes
-          # Clone just the recipes directory from Claude-Work
-          git clone --depth 1 --filter=blob:none --sparse \
-            https://github.com/Will-Code-For-Food-Inc/Claude-Work.git /tmp/claude-work
-          cd /tmp/claude-work
-          git sparse-checkout set recipes
-          cd -
+          # Shallow clone Claude-Work
+          git clone --depth 1 https://github.com/Will-Code-For-Food-Inc/Claude-Work.git /tmp/claude-work
 
           # Copy HTML recipe files
           cp /tmp/claude-work/recipes/*.html recipes/ 2>/dev/null || true
